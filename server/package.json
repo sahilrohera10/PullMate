@@ -1,0 +1,43 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "robust server for PullMate",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "start": "npm run build && nodemon dist/src/server.js",
+    "serve": "nodemon --exec ts-node ./src/server.ts",
+    "test": "npm test",
+    "prepare": "husky install",
+    "lint": "npx eslint **.js --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sahilrohera10/PullMate.git"
+  },
+  "keywords": [
+    "PR",
+    "review",
+    "workflow",
+    "automation",
+    "tool"
+  ],
+  "author": "sahilrohera10[at]gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sahilrohera10/PullMate/issues"
+  },
+  "homepage": "https://github.com/sahilrohera10/PullMate#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "nodemon": "^3.1.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.9.0",
+    "typescript": "^5.6.3"
+  }
+}

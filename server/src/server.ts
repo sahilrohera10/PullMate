@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import authRouter from "./routes/auth-router";
+import authRouter from "./routes/auth.router";
+import githubRouter from "./routes/github.router";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 const PORT = process.env.PORT || 7001;
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1-2024/auth", authRouter);
+app.use("/api/v1-2024/github", githubRouter);
 
 app.listen(PORT, () => {
   console.log(

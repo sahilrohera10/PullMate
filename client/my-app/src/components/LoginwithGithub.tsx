@@ -9,7 +9,6 @@ const LoginWithGitHub: React.FC = () => {
         const redirectURI = `${window.location.origin}/loginCallback`;
         window.location.href = `${baseURL}/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`;
     };
-
     return (
         <button onClick={loginWithGitHub}>
             Login with GitHub

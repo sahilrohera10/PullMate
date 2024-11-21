@@ -4,6 +4,8 @@ import axios from 'axios';
 export const callback = async (req: Request, res: Response):Promise<any> => {
     const CLIENT_ID = process.env.GITHUB_CLIENT_ID;
     const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
+    const baseURL = process.env.GITHUB_BASE_URL;
+
     const { code } = req.body;
     
     if (!code) {
@@ -12,7 +14,7 @@ export const callback = async (req: Request, res: Response):Promise<any> => {
 
     try {
         const tokenResponse = await axios.post(
-            'https://github.com/login/oauth/access_token',
+            `${baseURL}/login/oauth/access_token`,
             {
                 client_id:CLIENT_ID,
                 client_secret: CLIENT_SECRET,

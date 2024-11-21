@@ -2,9 +2,9 @@
   "name": "server",
   "version": "1.0.0",
   "description": "robust server for PullMate",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
-    "build": "tsc -p",
+    "build": "tsc",
     "watch": "tsc -w",
     "start": "cross-env NODE_ENV=production node dist/server.js",
     "dev": "cross-env NODE_ENV=development nodemon dist/server.js",
@@ -32,6 +32,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "joi": "^17.13.3",
     "nodemon": "^3.1.7",
     "octokit": "^4.0.2",
     "pg": "^8.13.1"

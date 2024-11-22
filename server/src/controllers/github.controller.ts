@@ -46,7 +46,8 @@ export async function register_webhook(
 
 export const repositories = async (req: Request, res: Response): Promise<any> => {
   const { Octokit } = await import("octokit");
-  const accessToken = req.body.accessToken;
+  const accessToken = req.body.access_token;
+  const userName = req.body.user_name;
 
   if (!accessToken) {
       return res.status(401).json({ error: 'Unauthorized: Missing access token' });
@@ -58,7 +59,8 @@ export const repositories = async (req: Request, res: Response): Promise<any> =>
 
   try {
       
-      const response = await octokit.request('GET /user/repos', {
+      const response = await octokit.request('GET /users/{username}/repos', {
+        username: userName,
           headers: {
               'X-GitHub-Api-Version': '2022-11-28',
           },

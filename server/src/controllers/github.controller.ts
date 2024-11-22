@@ -42,3 +42,44 @@ export async function register_webhook(
       .json({ message: "Error occurred while registering webhook" });
   }
 }
+
+
+export const repositories = async (req: Request, res: Response): Promise<any> => {
+  const { Octokit } = await import("octokit");
+  const accessToken = req.body.accessToken;
+
+  if (!accessToken) {
+      return res.status(401).json({ error: 'Unauthorized: Missing access token' });
+  }
+
+  const octokit = new Octokit({
+      auth: accessToken,
+  });
+
+  try {
+      
+      const response = await octokit.request('GET /user/repos', {
+          headers: {
+              'X-GitHub-Api-Version': '2022-11-28',
+          },
+          
+      });
+      const repositories = response.data.map((repo: any) => ({
+          id: repo.id,
+          name: repo.name,
+          full_name: repo.full_name,
+          description: repo.description,
+          private: repo.private,
+          html_url: repo.html_url,
+          language: repo.language,
+          created_at: repo.created_at,
+          updated_at: repo.updated_at,
+      }));
+
+      res.json(repositories);
+  } catch (error: any) {
+      console.error('Error fetching user repositories:', error.response?.data || error.message);
+      res.status(500).json({ error: 'Failed to fetch user repositories' });
+  }
+};
+

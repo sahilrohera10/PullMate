@@ -10,6 +10,9 @@ export async function register_webhook(
   const webhook_secret = process.env.WEBHOOK_SECRET;
   const baseUrl = process.env.BASE_URL;
 
+  console.log("Registering webhook for =>", owner, repo);
+  console.log("Webhook base url =>", baseUrl);
+
   try {
     const octokit = new Octokit({
       auth: access_token,

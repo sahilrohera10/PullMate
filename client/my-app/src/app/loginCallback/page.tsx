@@ -28,7 +28,7 @@ export default function Home() {
                     controller.abort();  
                 };
         }
-    }, [window.location.search]);
+    }, [window.location.search]); // why this ?
     return (
       <div >
          GITHUB login successful

@@ -3,8 +3,6 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
-console.log("db string => ", process.env.CONNECTION_STRING);
-
 // connecting using db credentials
 // export const dbPool: Pool = new Pool({
 //   user: process.env.DB_USER,

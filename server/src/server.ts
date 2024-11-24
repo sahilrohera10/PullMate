@@ -4,9 +4,11 @@ import cors from "cors";
 import authRouter from "./routes/auth.router";
 import githubRouter from "./routes/github.router";
 import webhookRouter from "./routes/webhook.router";
+import { connectToDB } from "./clients";
 import { requestLogger } from './middlewares/requestLogger.middleware';
 import { errorHandler } from './middlewares/error.middleware';
 import Logger from "./lib/logger";
+
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 const PORT = process.env.PORT || 7001;
@@ -22,6 +24,10 @@ app.use(
     origin: "*",
   })
 );
+
+
+connectToDB(); // connecting server to the postgres db instance
+
 app.get("/", (req, res) => {
   res.send("Hello, you are in PullMate`s server");
 });

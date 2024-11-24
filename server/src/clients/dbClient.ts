@@ -1,11 +1,22 @@
 import { Pool, PoolClient, QueryResult } from "pg";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
+// connecting using db credentials
+// export const dbPool: Pool = new Pool({
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   host: process.env.DB_HOST,
+//   port: Number(process.env.DB_PORT),
+//   database: process.env.DB_NAME,
+//   ssl: { rejectUnauthorized: false },
+// });
+
+// connecting using connection string
 export const dbPool: Pool = new Pool({
   connectionString: process.env.CONNECTION_STRING,
-  ssl: true,
+  ssl: { rejectUnauthorized: false },
 });
 
 /**

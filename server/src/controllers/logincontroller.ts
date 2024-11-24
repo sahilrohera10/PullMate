@@ -30,8 +30,6 @@ export const callback = async (req: Request, res: Response): Promise<any> => {
 
     const accessToken = tokenResponse.data.access_token;
 
-    // call github api to get user details
-
     const octokit = new Octokit({
       auth: accessToken,
     });
@@ -41,8 +39,6 @@ export const callback = async (req: Request, res: Response): Promise<any> => {
         "X-GitHub-Api-Version": "2022-11-28",
       },
     });
-
-    console.log("User info:", user_info.data);
 
     const user_body_query = [
       v4(),

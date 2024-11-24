@@ -1,5 +1,4 @@
 import { executeQuery } from "../clients";
-import { USER } from "../interfaces/namespace";
 
 export async function insert_user(user_info: (string | null)[]) {
   const query = `

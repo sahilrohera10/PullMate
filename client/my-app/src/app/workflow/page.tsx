@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+import { useEffect,  useState } from 'react'
 import { Input } from "@/components/ui/input"
 import { Check } from 'lucide-react'
 import { Button } from "@/components/ui/button"
@@ -7,13 +7,57 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
 interface WorkflowStepsProps {
-    prName: string;
+    
+    owner?: string;
+    repo?: string;
+    accessToken?: string;
 }
 
-export default function WorkflowSteps({prName = "PullMate"}: WorkflowStepsProps) {
+export default function WorkflowSteps({
+    owner = "",
+    repo = "",
+    accessToken = "" 
+}: WorkflowStepsProps) {
+
     const [showEmailInput, setShowEmailInput] = useState(false)
     const [email, setEmail] = useState('')
+    const [isDeploying, setIsDeploying] = useState(false)
+    const [repoName, setRepoName] = useState('')
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
+    useEffect(() =>{
+        const urlParams = new URLSearchParams(window.location.search)
+        const prNameFromUrl = urlParams.get('repoName')
+        if(prNameFromUrl) {
+            setRepoName(prNameFromUrl)
+        }
+    }, [])
+
+    const handleDeploy = async() => {
+        setIsDeploying(true)
+        try {
+            const response = await fetch(`${baseUrl}/api/v1-2024/github/register/webhook`,{
+                method: 'POST', 
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    owner, 
+                    repo, 
+                    access_token:accessToken,
+                    email:email
+                })
+            })
+            if(!response.ok) {
+                throw new Error('Failed to register webhook')
+            }
+            console.log('Webhook registered successfully')
+        } catch (error) {
+            console.error('Deployment Error :', error)
+        } finally{
+            setIsDeploying(false)
+        }
+    }
 
   return (
     <div className="min-h-screen bg-zinc-900 flex items-center justify-center p-4">
@@ -22,7 +66,7 @@ export default function WorkflowSteps({prName = "PullMate"}: WorkflowStepsProps)
           <div className="relative">
 
             <div className="border border-zinc-800 rounded-lg p-4 flex items-center justify-between bg-zinc-950/50">
-              <span className="text-l text-zinc-200">{prName} Connected</span>
+              <span className="text-l text-zinc-200">{repoName} Connected</span>
               <span className="bg-green-500/10 p-1 rounded">
                 <Check className="w-5 h-5 text-green-500" />
               </span>
@@ -64,8 +108,10 @@ export default function WorkflowSteps({prName = "PullMate"}: WorkflowStepsProps)
             className="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border-zinc-700"
             variant="outline"
             size="lg"
+            onClick={handleDeploy}
+            disabled={isDeploying}
           >
-            Deploy Workflow
+            {isDeploying ? 'Deploying...' : 'Deploy Workflow' }
           </Button>
         </div>
       </Card>

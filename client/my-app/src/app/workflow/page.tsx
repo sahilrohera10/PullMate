@@ -43,7 +43,7 @@ export default function WorkflowSteps() {
                 headers:{
                     'Content-Type': 'application/json',
                 },
-                body:JSON.stringify({payload})
+                body:JSON.stringify(payload)
             })
             if(!response.ok) {
                 throw new Error('Failed to register webhook')

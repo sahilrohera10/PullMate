@@ -6,18 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
-interface WorkflowStepsProps {
-    
-    owner?: string;
-    repo?: string;
-    accessToken?: string;
-}
 
-export default function WorkflowSteps({
-    owner = "",
-    repo = "",
-    accessToken = "" 
-}: WorkflowStepsProps) {
+export default function WorkflowSteps() {
 
     const [showEmailInput, setShowEmailInput] = useState(false)
     const [email, setEmail] = useState('')
@@ -25,13 +15,20 @@ export default function WorkflowSteps({
     const [repoName, setRepoName] = useState('')
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
+    const owner = localStorage.getItem('owner') || ''
+    const repo = localStorage.getItem('repo') || ''
+    const accessToken = localStorage.getItem('accessToken') || ''
+
+    const repoNameFromUrl = new URLSearchParams(window.location.search).get('repoName')
+    
+    const handleEmail = (e : React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.value)
+    }
     useEffect(() =>{
-        const urlParams = new URLSearchParams(window.location.search)
-        const prNameFromUrl = urlParams.get('repoName')
-        if(prNameFromUrl) {
-            setRepoName(prNameFromUrl)
+        if(repoNameFromUrl) {
+            setRepoName(repoNameFromUrl)
         }
-    }, [])
+    }, [repoNameFromUrl])
 
     const handleDeploy = async() => {
         setIsDeploying(true)
@@ -98,7 +95,7 @@ export default function WorkflowSteps({
                 type="email"
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleEmail}
                 className="mt-4 bg-zinc-900 border-zinc-700 text-zinc-200"
               />
             )}

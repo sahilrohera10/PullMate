@@ -17,7 +17,6 @@ export default function WorkflowSteps() {
 
     const owner = localStorage.getItem('owner') || ''
     const accessToken = localStorage.getItem('accessToken') || ''
-    const email = localStorage.getItem('additional_email') || ''
     const repo_url = localStorage.getItem('repo_url') || ''
     const user_id = localStorage.getItem('user_id') || ''
 

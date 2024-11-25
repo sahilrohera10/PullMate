@@ -16,7 +16,6 @@ export default function WorkflowSteps() {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
     const owner = localStorage.getItem('owner') || ''
-    const repo = localStorage.getItem('repo') || ''
     const accessToken = localStorage.getItem('accessToken') || ''
 
     const repoNameFromUrl = new URLSearchParams(window.location.search).get('repoName')
@@ -32,18 +31,19 @@ export default function WorkflowSteps() {
 
     const handleDeploy = async() => {
         setIsDeploying(true)
+        const payload = {
+            owner,
+            repo: repoName,
+            access_token: accessToken,
+            email
+        }
         try {
             const response = await fetch(`${baseUrl}/api/v1-2024/github/register/webhook`,{
                 method: 'POST', 
                 headers:{
                     'Content-Type': 'application/json',
                 },
-                body:JSON.stringify({
-                    owner, 
-                    repo, 
-                    access_token:accessToken,
-                    email:email
-                })
+                body:JSON.stringify({payload})
             })
             if(!response.ok) {
                 throw new Error('Failed to register webhook')
@@ -95,7 +95,7 @@ export default function WorkflowSteps() {
                 type="email"
                 placeholder="Enter your email"
                 value={email}
-                onChange={handleEmail}
+                onChange={(e)=> handleEmail(e)}
                 className="mt-4 bg-zinc-900 border-zinc-700 text-zinc-200"
               />
             )}

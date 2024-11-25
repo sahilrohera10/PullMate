@@ -17,6 +17,9 @@ export default function WorkflowSteps() {
 
     const owner = localStorage.getItem('owner') || ''
     const accessToken = localStorage.getItem('accessToken') || ''
+    const email = localStorage.getItem('additional_email') || ''
+    const repo_url = localStorage.getItem('repo_url') || ''
+    const user_id = localStorage.getItem('user_id') || ''
 
     const repoNameFromUrl = new URLSearchParams(window.location.search).get('repoName')
     
@@ -35,7 +38,9 @@ export default function WorkflowSteps() {
             owner,
             repo: repoName,
             access_token: accessToken,
-            email
+            additional_email:email,
+            repo_url,
+            user_id
         }
         try {
             const response = await fetch(`${baseUrl}/api/v1-2024/github/register/webhook`,{

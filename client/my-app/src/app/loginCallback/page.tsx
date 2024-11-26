@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [islongin, setIsLogin] = useState(false);
+  const [islogin, setIsLogin] = useState(false);
   const [isloading, setIsLoading] = useState(true);
   useEffect(() => {
     const controller = new AbortController();
@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <div>
       {isloading && <p>Loading...</p>}
-      {islongin && 
+      {islogin && 
           <div className="bg-gray-900 min-h-screen flex flex-col text-white">
           {/* Header */}
           <header className="flex justify-between items-center px-8 py-4 border-b border-gray-700">

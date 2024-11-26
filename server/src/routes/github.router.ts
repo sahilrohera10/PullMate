@@ -4,6 +4,6 @@ import { register_webhook, repositories } from "../controllers";
 const githubRouter = express.Router();
 
 githubRouter.post("/register/webhook", register_webhook);
-githubRouter.get("/user/repositories", repositories);
+githubRouter.post("/user/repositories", repositories);
 
 export default githubRouter;

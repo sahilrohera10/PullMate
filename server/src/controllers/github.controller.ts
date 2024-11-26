@@ -13,9 +13,6 @@ export async function register_webhook(
   const webhook_secret = process.env.WEBHOOK_SECRET;
   const baseUrl = process.env.BASE_URL;
 
-  console.log("Registering webhook for =>", owner, repo);
-  console.log("Webhook base url =>", baseUrl);
-
   try {
     const octokit = new Octokit({
       auth: access_token,
@@ -52,12 +49,10 @@ export async function register_webhook(
 
     const workflow_response = await insert_workflow(workflow_info_query);
 
-    return res
-      .status(200)
-      .json({
-        message: "Webhook registered successfully and workflow added in db",
-        workflow_response,
-      });
+    return res.status(200).json({
+      message: "Webhook registered successfully and workflow added in db",
+      workflow_response,
+    });
   } catch (error) {
     console.error("Error occurred while registering webhook =>", error);
     return res

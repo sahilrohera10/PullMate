@@ -2,33 +2,32 @@
 
 import React, { useEffect, useState } from "react";
 
-interface RepositoriesProps {
-  accessToken?: string;
-  username?: string;
-}
-
-const Repositories: React.FC<RepositoriesProps> = ({
-  accessToken = "",
-  username = "YASH-RAJ-HANS",
-}) => {
+const Repositories = ({}) => {
   const [repos, setRepos] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // const [accessToken, setAccessToken] = useState<string>();
+  // const [user, setUser] = useState<string>();
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const access_token = localStorage.getItem("access_token");
+  const username = localStorage.getItem("user_name");
 
   useEffect(() => {
-    const access_token = localStorage.getItem("access_token");
     const fetchRepos = async () => {
-      if (!accessToken || !username) {
-        // window.location.href = "http://localhost:3000";
-        // return;
+      if (username === null || access_token === null) {
+        console.log("No access token or username found");
+        return;
       }
+      // setAccessToken(access_token);
+      // setUser(username);
 
       setIsLoading(true);
       setError(null);
 
       try {
         const response = await fetch(
-          "http://localhost:7001/api/v1-2024/github/user/repositories",
+          `${baseUrl}/api/v1-2024/github/user/repositories`,
           {
             method: "POST",
             headers: {
@@ -59,8 +58,8 @@ const Repositories: React.FC<RepositoriesProps> = ({
       }
     };
 
-    fetchRepos();
-  }, [accessToken, username]);
+    if (username && access_token) fetchRepos();
+  }, [access_token, username, baseUrl]);
 
   if (isLoading) {
     return <div className="text-center text-gray-600">Loading...</div>;
@@ -74,7 +73,7 @@ const Repositories: React.FC<RepositoriesProps> = ({
     <div className=" bg-gray-900 flex flex-col items-center py-8 px-4 o">
       <div className="max-w-4xl w-full bg-gray-800 rounded-xl shadow-lg p-6">
         <h1 className="text-2xl font-bold text-white mb-6">
-          {username ? `Repositories for ${username}` : "Repositories"}
+          {/* {user ? `Repositories for ${user}` : "Repositories"} */}
         </h1>
         <div className="h-[90vh] space-y-4 overflow-y-auto pr-4">
           {repos.map((repo: any) => (

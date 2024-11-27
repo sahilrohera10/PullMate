@@ -68,6 +68,7 @@ export const repositories = async (
   const { Octokit } = await import("octokit");
   const accessToken = req.body.access_token;
   const userName = req.body.user_name;
+  const { type = "all", sort = "pushed", direction = "desc", per_page = 20, page = 1 } = req.body;
 
   if (!accessToken) {
     return res
@@ -85,6 +86,11 @@ export const repositories = async (
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
       },
+      type,
+      sort,
+      direction,
+      per_page,
+      page,
     });
     const repositories = response.data.map((repo: any) => ({
       id: repo.id,
@@ -99,6 +105,7 @@ export const repositories = async (
     }));
 
     res.json(repositories);
+    console.log("repo body",response.data);
   } catch (error: any) {
     console.error(
       "Error fetching user repositories:",

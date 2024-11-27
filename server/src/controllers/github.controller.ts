@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { v4 } from "uuid";
-import { insert_workflow } from "../services/workflow";
+import { insert_workflow , get_user_workflows} from "../services/workflow";
 
 export async function register_webhook(
   req: Request,
@@ -107,3 +107,22 @@ export const repositories = async (
     res.status(500).json({ error: "Failed to fetch user repositories" });
   }
 };
+
+export async function get_workflows(
+  req: Request,
+  res: Response
+):Promise<any>{
+  const {user_id} = req.params;
+
+  try{
+    const workflows = await get_user_workflows(user_id);//[@TODO] Add interface for workflows
+
+    return res.status(200).json({
+      message: "Workflows fetched successfully", 
+      data: workflows,
+    });
+  }catch(error){
+    console.error("Error fetching workflows:", error);
+    return res.status(500).json({ error: "Failed to fetch workflows" });
+  }
+}

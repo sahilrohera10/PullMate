@@ -1,12 +1,15 @@
-import React from 'react'
-import { Button } from './ui/button'
+import React from "react";
+import { Button } from "./ui/button";
 
 interface PaginationProps {
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, setCurrentPage }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
+  setCurrentPage,
+}) => {
   const totalPages = 20;
 
   const getVisiblePages = () => {
@@ -21,55 +24,56 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, setCurrentPage }) 
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page); 
+      setCurrentPage(page);
     }
   };
 
   return (
     <div className="flex justify-center items-center space-x-2 bg-gray-800 p-4 rounded-lg shadow-md">
+     
       <Button
-        className={`px-3 py-2 rounded-md text-sm font-medium ${currentPage === 1 ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-700'} text-white`}
-        onClick={() => handlePageChange(1)}
-        disabled={currentPage === 1}
-      >
-        {'<<'}
-      </Button>
-
-      <Button
-        className={`px-3 py-2 rounded-md text-sm font-medium ${currentPage === 1 ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-700'} text-white`}
+        className={`px-3 py-2 rounded-md text-sm font-medium ${
+          currentPage === 1
+            ? "cursor-not-allowed opacity-50"
+            : "hover:bg-gray-700"
+        } text-white`}
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
         Prev
       </Button>
 
-      {getVisiblePages().map((page) => (
-        <Button
-          key={page}
-          className={`px-3 py-2 rounded-md text-sm font-medium ${page === currentPage ? 'bg-blue-500 text-white' : 'hover:bg-gray-700 text-gray-300'} transition ease-in-out duration-200`}
-          onClick={() => handlePageChange(page)}
-        >
-          {page}
-        </Button>
-      ))}
+      <Button
+        className={`px-3 py-2 rounded-md text-sm font-medium bg-gray-700 text-white transition ease-in-out duration-200`}
+      >
+        {currentPage}
+      </Button>
 
       <Button
-        className={`px-3 py-2 rounded-md text-sm font-medium ${currentPage === totalPages ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-700'} text-white`}
+        className={`px-3 py-2 rounded-md text-sm font-medium ${
+          currentPage === totalPages
+            ? "cursor-not-allowed opacity-50"
+            : "hover:bg-gray-700"
+        } text-white`}
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
         Next
       </Button>
 
-      <Button
-        className={`px-3 py-2 rounded-md text-sm font-medium ${currentPage === totalPages ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-700'} text-white`}
+      {/* <Button
+        className={`px-3 py-2 rounded-md text-sm font-medium ${
+          currentPage === totalPages
+            ? "cursor-not-allowed opacity-50"
+            : "hover:bg-gray-700"
+        } text-white`}
         onClick={() => handlePageChange(totalPages)}
         disabled={currentPage === totalPages}
       >
-        {'>>'}
-      </Button>
+        {">>"}
+      </Button> */}
     </div>
   );
-}
+};
 
 export default Pagination;

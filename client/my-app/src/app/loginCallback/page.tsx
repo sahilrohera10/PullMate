@@ -37,6 +37,10 @@ export default function Home() {
             "user_name",
             data.user_insert_response.user_name
           );
+          localStorage.setItem(
+            "user_id",
+            data.user_insert_response.user_id
+          );
           setIsLoading(false);
           setIsLogin(true);
         })

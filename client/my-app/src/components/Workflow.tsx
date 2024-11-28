@@ -1,88 +1,91 @@
-"use client"
-import { useEffect, useState } from 'react'
-import { Input } from "@/components/ui/input"
-import { Check } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+"use client";
+import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-interface WorkflowProps {
-  access_token: string | null;
-  repo_url: string | null;
-}
 
-export default function Workflow({ access_token, repo_url }: WorkflowProps) {
-
-  const [showEmailInput, setShowEmailInput] = useState(false)
-  const [email, setEmail] = useState('')
-  const [isDeploying, setIsDeploying] = useState(false)
-  const [repoName, setRepoName] = useState<string | null>(null)
+export default function Workflow({}) {
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isDeploying, setIsDeploying] = useState(false);
+  const [repoName, setRepoName] = useState<string | null>(null);
   const [owner, setOwner] = useState<string | null>(null);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-  const user_id = localStorage.getItem('user_id') || ''
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [repoUrl, setRepoUrl] = useState<string | null>(null);
 
-  const repoNameFromUrl = new URLSearchParams(window.location.search).get('repoName')
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const user_id = localStorage.getItem("user_id") || "";
 
-  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value)
-  }
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const extractOwnerAndRepo = (repoUrl: string) => {
     const url = new URL(repoUrl);
-    const pathParts = url.pathname.split('/'); 
-    
-    const owner = pathParts[1]; 
-    const repoName = pathParts[2]; 
-    
+    const pathParts = url.pathname.split("/");
+
+    const owner = pathParts[1];
+    const repoName = pathParts[2];
+
     return { owner, repoName };
   };
 
   useEffect(() => {
-    if (repo_url) {
-      const { owner, repoName } = extractOwnerAndRepo(repo_url);
+    const repoUrlFromQuery = searchParams.get("repo");
+    if (repoUrlFromQuery) {
+      setRepoUrl(repoUrlFromQuery);
+      const { owner, repoName } = extractOwnerAndRepo(repoUrlFromQuery);
       setOwner(owner);
       setRepoName(repoName);
     }
-  }, [repo_url]);
-
-  useEffect(() => {
-    if (repoNameFromUrl) {
-      setRepoName(repoNameFromUrl)
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      setAccessToken(token);
     }
-  }, [repoNameFromUrl])
+  }, [searchParams]);
+
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
 
   const handleDeploy = async () => {
-    setIsDeploying(true)
+    setIsDeploying(true);
     const payload = {
       owner,
       repo: repoName,
-      access_token,
+      access_token: accessToken,
       additional_email: email,
-      repo_url,
-      user_id
-    }
-    console.log("Payload Body",payload);
-    console.log("Repo Url:",repo_url);
+      repo_url: repoUrl,
+      user_id,
+    };
     try {
-      const response = await fetch(`${baseUrl}/api/v1-2024/github/register/webhook`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload)
-      })
+      const response = await fetch(
+        `${baseUrl}/api/v1-2024/github/register/webhook`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
       if (!response.ok) {
-        throw new Error('Failed to register webhook')
+        throw new Error("Failed to register webhook");
       }
-      console.log('Webhook registered successfully')
+      console.log("Webhook registered successfully");
     } catch (error) {
-      console.error('Deployment Error:', error)
+      console.error("Deployment Error:", error);
     } finally {
-      setIsDeploying(false)
+      setIsDeploying(false);
     }
-  }
+  };
 
   return (
-    <div className="max-h-[400px] w-[25vw]">
+    <div className="max-h-[400px] w-[25vw] mt-20">
       <Card className="bg-zinc-950/50 border-zinc-800 p-8 max-w-md w-full space-y-8">
         <div className="space-y-6">
           <div className="relative">
@@ -130,10 +133,10 @@ export default function Workflow({ access_token, repo_url }: WorkflowProps) {
             onClick={handleDeploy}
             disabled={isDeploying}
           >
-            {isDeploying ? 'Deploying...' : 'Deploy Workflow'}
+            {isDeploying ? "Deploying..." : "Deploy Workflow"}
           </Button>
         </div>
       </Card>
     </div>
-  )
+  );
 }

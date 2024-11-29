@@ -86,7 +86,7 @@ export default function Workflow({}) {
 
   return (
     <div className="max-h-[400px] w-[25vw] mt-20">
-      <Card className="bg-zinc-950/50 border-zinc-800 p-8 max-w-md w-full space-y-8">
+      <Card className="bg-black border-zinc-800 p-8 max-w-md w-full space-y-8">
         <div className="space-y-6">
           <div className="relative">
             <div className="border border-zinc-800 rounded-lg p-4 flex items-center justify-between bg-zinc-950/50">

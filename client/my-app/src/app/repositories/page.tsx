@@ -77,15 +77,6 @@ const Repositories = ({}) => {
       fetchRepos();
     }
   }, [access_token, username, baseUrl, currentPage]);
-
-  // if (isLoading) {
-  //   return (
-  //     <div className=" bg-zinc-900 w-full h-screen">
-  //       <div className="text-center text-gray-100">Loading...</div>
-  //     </div>
-  //   );
-  // }
-
   if (error || access_token === null || username === null) {
     return (
       <div className=" bg-zinc-900 w-full h-screen">
@@ -95,19 +86,19 @@ const Repositories = ({}) => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-900 flex justify-around p-4 px-8 my-auto h-screen">
-      <div className="max-w-3xl w-full bg-zinc-800/50 border-zinc-800 rounded-xl shadow-lg p-6 h-[70vh] mt-20">
-        <h1 className="text-2xl font-bold text-white mb-6">
+    <div className="min-h-screen bg-zinc-900 flex justify-around p-4 px-8 my-auto h-screen relative">
+      <div className="max-w-2xl w-full bg-black border-zinc-800 rounded-xl shadow-lg  h-[600px] mt-20">
+        <h1 className="text-2xl font-bold text-white mb-6 p-8 border-b-4 border-zinc-900">
           {username} Repositories
         </h1>
-        <div className="h-[60vh] w-full space-y-4 overflow-y-auto mb-4 px-8">
+        <div className="h-[400px] w-full space-y-4 overflow-y-auto mb-4 px-8 p-6 pt-0 custom-scrollbar ">
           {isLoading ? (
             <div className=" bg-zinc-900 w-full ">
               <div className="text-center text-gray-100 p-12">Loading...</div>
             </div>
           ) : (
             <>
-              <UserRepoTable repos={repos} />
+              <UserRepoTable repos={repos} currentPage={currentPage} />
               {!repos.length && (
                 <div className="text-gray-500 text-center">
                   No repositories available. Please authenticate or ensure you

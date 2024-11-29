@@ -29,7 +29,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex justify-center items-center space-x-2 bg-gray-800 p-4 rounded-lg shadow-md">
+    <div className="flex justify-center items-center space-x-2 bg-gray-950 p-4 rounded-lg shadow-md">
      
       <Button
         className={`px-3 py-2 rounded-md text-sm font-medium ${
@@ -61,17 +61,6 @@ const Pagination: React.FC<PaginationProps> = ({
         Next
       </Button>
 
-      {/* <Button
-        className={`px-3 py-2 rounded-md text-sm font-medium ${
-          currentPage === totalPages
-            ? "cursor-not-allowed opacity-50"
-            : "hover:bg-gray-700"
-        } text-white`}
-        onClick={() => handlePageChange(totalPages)}
-        disabled={currentPage === totalPages}
-      >
-        {">>"}
-      </Button> */}
     </div>
   );
 };

@@ -2,8 +2,8 @@ import { executeQuery } from "../clients";
 
 export async function insert_workflow(workflow_info: (string | null)[]) {
   const query = `
-    INSERT INTO workflows (workflow_id, repo_name, repo_url, user_id, owner_name, additional_email, no_of_prs, no_of_reviews, created_at)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    INSERT INTO workflows (workflow_id, repo_name, repo_url, user_id, owner_name, additional_email, created_at)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
     RETURNING *;
   `;
 
@@ -16,7 +16,7 @@ export async function insert_workflow(workflow_info: (string | null)[]) {
     throw error;
   }
 }
-export async function get_user_workflows(user_id: string ){
+export async function get_user_workflows(user_id: string) {
   const query = `
     SELECT * FROM workflows WHERE user_id = $1  ORDER BY created_at DESC;
   `;
@@ -24,8 +24,7 @@ export async function get_user_workflows(user_id: string ){
   try {
     const response = await executeQuery(query, [user_id]);
     return response.rows;
-  }
-   catch (error) {
+  } catch (error) {
     console.error("Error fetching workflows:", error);
     throw error;
   }

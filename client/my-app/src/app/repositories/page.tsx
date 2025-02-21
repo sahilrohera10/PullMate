@@ -49,8 +49,6 @@ const Repositories = ({}) => {
             body: JSON.stringify({
               access_token: access_token,
               user_name: username,
-              page: currentPage || 1,
-              per_page: 30,
             }),
           }
         );
@@ -62,8 +60,7 @@ const Repositories = ({}) => {
         }
 
         const data = await response.json();
-        if(data)
-        setRepos(data);
+        if (data) setRepos(data);
       } catch (error: any) {
         setError(
           error.message || "An error occurred while fetching repositories"

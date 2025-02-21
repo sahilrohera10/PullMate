@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import nextConfig from "../../next.config";
 
 const LoginWithGitHub = ({ title }: { title: string }) => {
   const router = useRouter();
@@ -13,14 +12,14 @@ const LoginWithGitHub = ({ title }: { title: string }) => {
       console.log("already loggedin access_token ->", access_token);
       router.push("/loginCallback");
     } else {
-      const clientID = nextConfig.NEXT_PUBLIC_GITHUB_CLIENT_ID;
-      const baseURL = nextConfig.NEXT_PUBLIC_GITHUB_BASE_URL;
+      const clientID = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
+      const baseURL = process.env.NEXT_PUBLIC_GITHUB_BASE_URL;
       const redirectURI = `${window.location.origin}/loginCallback`;
 
       console.log("clientID ->", clientID);
       console.log("baseURL ->", baseURL);
       console.log("redirectURI ->", redirectURI);
-      // window.location.href = `${baseURL}/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}&scope=repo,write:repo_hook`;
+      window.location.href = `${baseURL}/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}&scope=repo,write:repo_hook`;
     }
   };
   return (

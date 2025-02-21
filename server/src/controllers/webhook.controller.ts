@@ -3,6 +3,44 @@ import { verifyGitHubWebhookSignature } from "../utils/github_services";
 import Logger from "../lib/logger";
 import axios from "axios";
 
+function formatPRComment(input: any) {
+  return input
+    .replace(/\n\n/g, "\n\n") // Preserve double line breaks
+    .replace(/\*\*([^*]+)\*\*/g, "**$1**") // Keep bold formatting
+    .replace(/\* (.*?)\n/g, "- $1\n"); // Convert list to markdown format
+}
+
+function commentIntoPR(payload: any, comment: string) {
+  let data = JSON.stringify({
+    body: comment,
+  });
+
+  const owner = payload.pull_request.user.login;
+  const repo = payload.repository.name;
+  const prNumber = payload.number;
+  const token = process.env.GITHUB_TOKEN!;
+
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `https://api.github.com/repos/${owner}/${repo}/issues/${prNumber}/comments`,
+    headers: {
+      Authorization: `token ${token}`,
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+
+  axios
+    .request(config)
+    .then((response: any) => {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error: any) => {
+      console.log(error);
+    });
+}
+
 export async function handle_pr_webhook(
   req: Request,
   res: Response
@@ -52,16 +90,12 @@ export async function handle_pr_webhook(
         data: data,
       };
 
-      axios
-        .request(config)
-        .then((response) => {
-          console.log(JSON.stringify(response.data));
-          const data = JSON.stringify(response.data);
-          console.log("AI response => ", data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      const responseData = await axios.request(config);
+      const response = responseData.data.candidates[0].content.parts[0].text;
+      console.log("response", response);
+      const formattedPRComment = formatPRComment(response);
+      console.log("formattedPRComment =>", formattedPRComment);
+      commentIntoPR(payload, formattedPRComment);
       res.status(200).send("Webhook received");
     } else {
       Logger.error("Unauthorized");

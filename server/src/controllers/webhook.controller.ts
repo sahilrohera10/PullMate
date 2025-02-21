@@ -46,7 +46,10 @@ export async function processPayload() {
     async (payload) => {
       console.log("listening payload from queue =>", payload);
     },
-    { connection: redisConnection }
+    {
+      connection: redisConnection,
+      concurrency: 2, // ⚡ Process only 2 jobs at a time (adjust based on server)
+    }
   );
 
   console.log("payload processing completed");

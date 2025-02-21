@@ -3,42 +3,36 @@ import { verifyGitHubWebhookSignature } from "../utils/github_services";
 import Logger from "../lib/logger";
 import axios from "axios";
 
-function formatPRComment(input: any) {
+function formatPRComment(input: string): string {
   return input
     .replace(/\n\n/g, "\n\n") // Preserve double line breaks
     .replace(/\*\*([^*]+)\*\*/g, "**$1**") // Keep bold formatting
     .replace(/\* (.*?)\n/g, "- $1\n"); // Convert list to markdown format
 }
 
-function commentIntoPR(payload: any, comment: string) {
-  let data = JSON.stringify({
-    body: comment,
-  });
-
-  const owner = payload.pull_request.user.login;
+async function commentIntoPR(payload: any, comment: string) {
+  const owner = payload.repository.owner.login;
   const repo = payload.repository.name;
-  const prNumber = payload.number;
+  const prNumber = payload.pull_request.number; // Fixed PR number extraction
   const token = process.env.GITHUB_TOKEN!;
 
-  let config = {
-    method: "post",
-    maxBodyLength: Infinity,
-    url: `https://api.github.com/repos/${owner}/${repo}/issues/${prNumber}/comments`,
-    headers: {
-      Authorization: `token ${token}`,
-      "Content-Type": "application/json",
-    },
-    data: data,
-  };
+  const url = `https://api.github.com/repos/${owner}/${repo}/issues/${prNumber}/comments`;
 
-  axios
-    .request(config)
-    .then((response: any) => {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch((error: any) => {
-      console.log(error);
-    });
+  try {
+    const response = await axios.post(
+      url,
+      { body: comment },
+      {
+        headers: {
+          Authorization: `token ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    Logger.info("PR comment posted successfully:", response.data);
+  } catch (error: any) {
+    Logger.error("Error commenting on PR:", error.response?.data || error);
+  }
 }
 
 export async function handle_pr_webhook(
@@ -58,15 +52,18 @@ export async function handle_pr_webhook(
       })
     ) {
       Logger.info("Webhook received");
-      console.log("payload", payload);
 
       const diff_url = payload.pull_request.diff_url;
-      // fetch the diff content
       const diff_content = await fetch(diff_url);
       const diff = await diff_content.text();
-      console.log("diff", diff);
+      Logger.info("Fetched diff content successfully");
 
-      let data = JSON.stringify({
+      const apiKey = process.env.GEMINI_API_KEY!; // Use env variable
+      if (!apiKey) {
+        throw new Error("Missing Gemini API Key");
+      }
+
+      const requestBody = {
         contents: [
           {
             parts: [
@@ -78,32 +75,30 @@ export async function handle_pr_webhook(
             ],
           },
         ],
-      });
-
-      let config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDv2iVqTTq0kJA8iux_nJxFfgzfgPkgn4k",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
       };
 
-      const responseData = await axios.request(config);
-      const response = responseData.data.candidates[0].content.parts[0].text;
-      console.log("response", response);
-      const formattedPRComment = formatPRComment(response);
-      console.log("formattedPRComment =>", formattedPRComment);
-      commentIntoPR(payload, formattedPRComment);
-      res.status(200).send("Webhook received");
+      const geminiResponse = await axios.post(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        requestBody,
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      const responseText =
+        geminiResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      if (!responseText) throw new Error("Empty response from Gemini API");
+
+      const formattedPRComment = formatPRComment(responseText);
+      Logger.info("Formatted PR comment successfully");
+
+      await commentIntoPR(payload, formattedPRComment);
+
+      res.status(200).send("Webhook processed successfully");
     } else {
-      Logger.error("Unauthorized");
+      Logger.error("Unauthorized: Invalid signature");
       res.status(401).send("Unauthorized");
     }
-  } catch (error) {
-    Logger.error("Unauthorized");
-
-    res.status(401).send("Unauthorized");
+  } catch (error: any) {
+    Logger.error("Error processing webhook:", error.message || error);
+    res.status(500).send("Internal Server Error");
   }
 }

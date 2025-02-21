@@ -16,3 +16,17 @@ export async function insert_workflow(workflow_info: (string | null)[]) {
     throw error;
   }
 }
+export async function get_user_workflows(user_id: string ){
+  const query = `
+    SELECT * FROM workflows WHERE user_id = $1  ORDER BY created_at DESC;
+  `;
+
+  try {
+    const response = await executeQuery(query, [user_id]);
+    return response.rows;
+  }
+   catch (error) {
+    console.error("Error fetching workflows:", error);
+    throw error;
+  }
+}

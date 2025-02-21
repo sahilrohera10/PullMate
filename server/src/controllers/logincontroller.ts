@@ -3,8 +3,18 @@ import axios from "axios";
 import { v4 } from "uuid";
 import { USER } from "../interfaces/namespace";
 import { insert_user } from "../services/user.service";
+import { codeSchema } from "../validations/login.validations";
+
 
 export const callback = async (req: Request, res: Response): Promise<any> => {
+  const { error } = codeSchema.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({
+      message: "Validation error",
+      error: error.details.map((err) => err.message),
+    });
+  }
   const { Octokit } = await import("octokit");
 
   const CLIENT_ID = process.env.GITHUB_CLIENT_ID;

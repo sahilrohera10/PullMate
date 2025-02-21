@@ -4,6 +4,7 @@ import cors from "cors";
 import authRouter from "./routes/auth.router";
 import githubRouter from "./routes/github.router";
 import webhookRouter from "./routes/webhook.router";
+import workflowRouter from "./routes/workflow.router";
 import { connectToDB } from "./clients";
 import { requestLogger } from './middlewares/requestLogger.middleware';
 import { errorHandler } from './middlewares/error.middleware';
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1-2024/auth", authRouter);
 app.use("/api/v1-2024/github", githubRouter);
 app.use("/api/v1-2024/webhook", webhookRouter);
+app.use("/api/v1-2024/workflow", workflowRouter);
 
 app.use(errorHandler);
 

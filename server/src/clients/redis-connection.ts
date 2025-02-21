@@ -6,5 +6,8 @@ const redisConfig = {
 };
 
 const redisConnection = new Redis(redisConfig);
+redisConnection.on("error", (err: any) =>
+  console.error("❌ Redis Error:", err)
+);
 
 module.exports = redisConnection;

@@ -10,7 +10,8 @@ function formatPRComment(input: any) {
     .replace(/\* (.*?)\n/g, "- $1\n"); // Convert list to markdown format
 }
 
-const token = process.env.GITHUB_TOKEN!;
+const token = process.env.GITHUB_TOKEN;
+console.log("token", token);
 
 function commentIntoPR(payload: any, comment: string) {
   let data = JSON.stringify({

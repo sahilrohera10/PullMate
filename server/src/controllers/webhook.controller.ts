@@ -24,7 +24,7 @@ export async function handle_pr_webhook(
       Logger.info("Webhook received");
       console.log("payload", payload);
       // Add a job of type 'email' to the 'mailer' queue
-      await payloadProcessingQueue.add("payload", payload);
+      // await payloadProcessingQueue.add("payload", payload);
       console.log("payload added into the queue");
       res.status(200).send("Webhook received");
     } else {
@@ -36,28 +36,4 @@ export async function handle_pr_webhook(
 
     res.status(401).send("Unauthorized");
   }
-}
-
-export async function processPayload() {
-  console.log("payload processing started");
-  // Add your payload processing logic here
-  const worker = new Worker(
-    "payload-processing",
-    async (payload) => {
-      console.log("listening payload from queue =>", payload);
-    },
-    {
-      connection: redisConnection,
-      concurrency: 2, // ⚡ Process only 2 jobs at a time (adjust based on server)
-    }
-  );
-  worker.on("completed", (payload) => {
-    console.log(`✅ Job ${payload} completed`);
-  });
-
-  worker.on("failed", (payload: any, err) => {
-    console.error(`❌ Job ${payload} failed:`, err);
-  });
-
-  console.log("payload processing completed");
 }

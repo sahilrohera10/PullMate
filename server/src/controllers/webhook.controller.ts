@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import { verifyGitHubWebhookSignature } from "../utils/github_services";
 import Logger from "../lib/logger";
-import { payloadProcessingQueue } from "../clients/queue";
-import { Worker } from "bullmq";
-const redisConnection = require("../clients/redis-connection");
 
 export async function handle_pr_webhook(
   req: Request,

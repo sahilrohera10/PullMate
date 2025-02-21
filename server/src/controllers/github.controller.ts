@@ -8,6 +8,8 @@ export async function register_webhook(
 ): Promise<any> {
   const { Octokit } = await import("octokit");
 
+  console.log("hi there");
+
   const { repo, owner, access_token, repo_url, user_id, additional_email } =
     req.body;
   const webhook_secret = process.env.WEBHOOK_SECRET;

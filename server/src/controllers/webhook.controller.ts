@@ -21,9 +21,9 @@ export async function handle_pr_webhook(
     res.status(401).send("Unauthorized");  
   }
   } catch (error) {
-    Logger.error("Unauthorized");
+    Logger.error("Failed error while verifying");
 
-    res.status(401).send("Unauthorized");
+    res.status(500).send("Failed error while verifying");
   }
  
 }

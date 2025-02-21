@@ -51,12 +51,12 @@ export async function processPayload() {
       concurrency: 2, // ⚡ Process only 2 jobs at a time (adjust based on server)
     }
   );
-  worker.on("completed", (job) => {
-    console.log(`✅ Job ${job.id} completed`);
+  worker.on("completed", (payload) => {
+    console.log(`✅ Job ${payload} completed`);
   });
 
-  worker.on("failed", (job: any, err) => {
-    console.error(`❌ Job ${job.id} failed:`, err);
+  worker.on("failed", (payload: any, err) => {
+    console.error(`❌ Job ${payload} failed:`, err);
   });
 
   console.log("payload processing completed");

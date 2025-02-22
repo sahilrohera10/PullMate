@@ -3,10 +3,10 @@ import axios from "axios";
 import { v4 } from "uuid";
 import { USER } from "../interfaces/namespace";
 import { insert_user } from "../services/user.service";
-import { codeSchema } from "../validations/login.validations";
+import { codeSchema } alidations/login.validations";
 
 
-export const callback = async (req: Request, res: Response): Promise<any> => {
+export const callback = (req: Request, res: Response): Promise<any> => {
   const { error } = codeSchema.validate(req.body);
 
   if (error) {
@@ -28,7 +28,7 @@ export const callback = async (req: Request, res: Response): Promise<any> => {
   }
 
   try {
-    const tokenResponse = await axios.post(
+    const tokenResponse  await axios.post(
       `${baseURL}/login/oauth/access_token`,
       {
         client_id: CLIENT_ID,
@@ -50,7 +50,7 @@ export const callback = async (req: Request, res: Response): Promise<any> => {
       },
     });
 
-    const user_body_query = [
+    const user_body_query 
       v4(),
       user_info.data.name,
       user_info.data.avatar_url,

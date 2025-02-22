@@ -94,7 +94,7 @@ export const repositories = async (
   const accessToken = req.body.access_token;
   const userName = req.body.user_name;
   const {
-    type = "all",
+    type = "owner",
     sort = "pushed",
     direction = "desc",
     per_page = 30,

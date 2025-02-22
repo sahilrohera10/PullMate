@@ -94,11 +94,12 @@ export const repositories = async (
   const accessToken = req.body.access_token;
   const userName = req.body.user_name;
   const {
-    type = "all",
+    type = "owner",
     sort = "pushed",
     direction = "desc",
     per_page = 30,
     page = 1,
+    affiliation = "owner",
   } = req.body;
 
   if (!accessToken) {
@@ -120,6 +121,8 @@ export const repositories = async (
       sort,
       direction,
       per_page,
+      affiliation,
+      visibility: "all",
       page,
     });
     const repositories = response.data.map((repo: any) => ({

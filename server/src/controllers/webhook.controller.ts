@@ -33,13 +33,15 @@ function commentIntoPR(payload: any, comment: string) {
     data: data,
   };
 
+  console.log("config", config);
+
   axios
     .request(config)
     .then((response: any) => {
       console.log(JSON.stringify(response.data));
     })
     .catch((error: any) => {
-      console.log(error);
+      console.log("error in commenting in PR", error);
     });
 }
 

@@ -1,7 +1,7 @@
 import { Pool, PoolClient, QueryResult } from "pg";
 import dotenv from "dotenv";
 
-dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
+dotenv.config({ path: `.env.$NODE_ENV}` });
 
 // connecting using db credentials
 // export const dbPool: Pool = new Pool({
@@ -16,7 +16,7 @@ dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 // connecting using connection string
 export const dbPool: Pool = new Pool({
   connectionString: process.env.CONNECTION_STRING,
-  ssl: { rejectUnauthorized: false },
+  ssl: ized: false },
 });
 
 /**

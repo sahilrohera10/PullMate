@@ -7,10 +7,10 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
 
-export default function WorkflowSteps() {
+export default 
 
     const [showEmailInput, setShowEmailInput] = useState(false)
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = State('')
     const [isDeploying, setIsDeploying] = useState(false)
     const [repoName, setRepoName] = useState('')
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
@@ -35,7 +35,7 @@ export default function WorkflowSteps() {
         setIsDeploying(true)
         const payload = {
             owner,
-            repo: repoName,
+            repo = repoName,
             access_token: accessToken,
             additional_email:email,
             repo_url,
@@ -63,7 +63,7 @@ export default function WorkflowSteps() {
   return (
     <div className="min-h-screen bg-zinc-900 flex items-center justify-center p-4">
       <Card className="bg-zinc-950/50 border-zinc-800 p-8 max-w-md w-full space-y-8">
-        <div className="space-y-6">
+        <div className="space-y-6
           <div className="relative">
 
             <div className="border border-zinc-800 rounded-lg p-4 flex items-center justify-between bg-zinc-950/50">
@@ -89,7 +89,7 @@ export default function WorkflowSteps() {
           <div className="border border-zinc-800 rounded-lg p-4 bg-zinc-950/50">
             <div 
                 className="flex items-center justify-between cursor-pointer"
-                onClick={() => setShowEmailInput(!showEmailInput)}
+                onClick={() => (!showEmailInput)}
                 >
 
             <span className="text-l text-zinc-200">Add Email ID</span>

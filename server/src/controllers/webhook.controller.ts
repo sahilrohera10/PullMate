@@ -76,7 +76,7 @@ export async function handle_pr_webhook(
             parts: [
               {
                 text:
-                  "You are an expert code reviewer and software architect. Please provide:\n\n1. PR Summary (2-3 sentences)\n2. Top important changes minimum 1 and maximum 5 in a crisp points\n\n Also try to give more attarctive so that developer gets attaracted \n\n Also give the mini funny poem related to code and the new changes\n\n Here's the code to review:\n\n" +
+                  "You are an expert code reviewer and software architect . Please provide:\n\n1. PR Summary (2-3 sentences)\n2. Top 5 most important changes and suggestions as bullet points\n\nHere's the code to review:\n\n" +
                   diff,
               },
             ],

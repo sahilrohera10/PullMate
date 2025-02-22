@@ -13,8 +13,8 @@ interface Repository {
   private: boolean;
   html_url: string;
   language: string | null;
-  created_at: string;
-  updated_at: string;
+  created_at: string,
+  updated_at: string | boolean;
 }
 
 const Repositories = ({}) => {
@@ -54,7 +54,7 @@ const Repositories = ({}) => {
         );
 
         if (!response.ok) {
-          throw new Error(
+          throw Error(
             `Failed to fetch repositories: ${response.statusText}`
           );
         }
@@ -83,7 +83,7 @@ const Repositories = ({}) => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-900 flex justify-around p-4 px-8 my-auto h-screen relative">
+    <div className=" min -screen bg-zinc-900 flex justify-around p-4 px-8 my-auto h-screen relative">
       <div className="max-w-2xl w-full bg-black border-zinc-800 rounded-xl shadow-lg  h-[600px] mt-20">
         <h1 className="text-2xl font-bold text-white mb-6 p-8 border-b-4 border-zinc-900">
           {username} Repositories
@@ -91,7 +91,7 @@ const Repositories = ({}) => {
         <div className="h-[400px] w-full space-y-4 overflow-y-auto mb-4 px-8 p-6 pt-0 custom-scrollbar ">
           {isLoading ? (
             <div className=" bg-zinc-900 w-full ">
-              <div className="text-center text-gray-100 p-12">Loading...</div>
+              <div clsName="text-center text-gray-100 p-12">Loading...</div>
             </div>
           ) : (
             <>

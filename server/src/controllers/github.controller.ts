@@ -112,8 +112,7 @@ export const repositories = async (
   });
 
   try {
-    const response = await octokit.request("GET /users/{username}/repos", {
-      username: userName,
+    const response = await octokit.request("GET /users/repos", {
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
       },

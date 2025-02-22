@@ -3,22 +3,22 @@ import { verifyGitHubWebhookSignature } from "../utils/github_services";
 import Logger from "../lib/logger";
 import axios from "axios";
 
-function formatPRComment(input: any) {
+function formatPRComment
   return input
-    .replace(/\n\n/g, "\n\n") // Preserve double line breaks
-    .replace(/\*\*([^*]+)\*\*/g, "**$1**") // Keep bold formatting
-    .replace(/\* (.*?)\n/g, "- $1\n"); // Convert list to markdown format
+    .replace(/\n\n/g, "\n\n") 
+    .replace(/\*\*([^*]+)\*\*/g, "**$1**") 
+    .replace(/\* (.*?)\n/g, "- $1\n"); 
 }
 
 const token = process.env.GITHUB_TOKEN;
 console.log("token", token);
 
-function commentIntoPR(payload: any, comment: string) {
+function (payload: any, comment: string) {
   let data = JSON.stringify({
     body: comment,
   });
 
-  const owner = payload.repository.owner.login;
+  const owner  payload.repository.owner.login;
   const repo = payload.repository.name;
   const prNumber = payload.number;
 
@@ -28,7 +28,7 @@ function commentIntoPR(payload: any, comment: string) {
     url: `https://api.github.com/repos/${owner}/${repo}/issues/${prNumber}/comments`,
     headers: {
       Authorization: `token ${token}`,
-      "Content-Type": "application/json",
+
     },
     data: data,
   };

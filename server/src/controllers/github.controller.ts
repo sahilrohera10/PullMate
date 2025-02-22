@@ -99,7 +99,6 @@ export const repositories = async (
     direction = "desc",
     per_page = 30,
     page = 1,
-    affiliation = "owner",
   } = req.body;
 
   if (!accessToken) {
@@ -113,7 +112,8 @@ export const repositories = async (
   });
 
   try {
-    const response = await octokit.request("GET /users/repos", {
+    const response = await octokit.request("GET /users/{username}/repos", {
+      username: userName,
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
       },
@@ -121,8 +121,6 @@ export const repositories = async (
       sort,
       direction,
       per_page,
-      affiliation,
-      visibility: "all",
       page,
     });
     const repositories = response.data.map((repo: any) => ({

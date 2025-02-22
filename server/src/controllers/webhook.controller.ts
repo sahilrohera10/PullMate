@@ -18,7 +18,7 @@ function commentIntoPR(payload: any, comment: string) {
     body: comment,
   });
 
-  const owner = payload.repositories.owner.login;
+  const owner = payload.repository.owner.login;
   const repo = payload.repository.name;
   const prNumber = payload.number;
 

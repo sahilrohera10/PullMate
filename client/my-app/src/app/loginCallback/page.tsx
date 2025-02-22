@@ -12,16 +12,16 @@ type WorkflowResponse = {
     repo_url: string;
     user_id: string;
     owner_name: string;
-    additional_email: string;
-    no_of_prs: string;
-    no_of_reviews: string;
-    created_at: string;
+    additional_email: string,
+    no_of_prs: string,
+    no_of_reviews: string | boolean;
+    created_at: string | number;
   }>;
 };
 
 
 export default function Home() {
-  const router = useRouter();
+  const router = useRouter,
   const [islogin, setIsLogin] = useState(false);
   const [isloading, setIsLoading] = useState(true);
   const [workflows, setWorkflows] = useState<WorkflowResponse['data']>([]);
@@ -41,7 +41,7 @@ export default function Home() {
         `${baseUrl}/api/v1-2024/workflow/${userId}`,
         {
           headers: {
-            Authorization: `Bearer ${access_token}`
+            Authorization: "Bearer ${access_token}"
           }
         }
       );

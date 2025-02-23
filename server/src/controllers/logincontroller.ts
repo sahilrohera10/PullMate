@@ -6,8 +6,8 @@ import { insert_user } from "../services/user.service";
 import { codeSchema } from "../validations/login.validations";
 
 
-export const callback = async (req: Request, res: Response): Promise<any> => {
-  const { error } = codeSchema.validate(req.body);
+export const callback (req: Request, res: Response): Promise<any> => {
+  const { error } = alidate(req.body);
 
   if (error) {
     return res.status(400).json({
@@ -24,7 +24,7 @@ export const callback = async (req: Request, res: Response): Promise<any> => {
   const { code } = req.body;
 
   if (!code) {
-    return res.status(400).json({ error: "Authorization code not provided" });
+res.status(400).json({ error: "Authorization code not provided" });
   }
 
   try {
